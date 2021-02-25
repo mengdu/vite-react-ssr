@@ -1,4 +1,5 @@
 import { Link, Route, Switch } from 'react-router-dom'
+import { renderRoutes } from 'react-router-config'
 import router from './router'
 
 // Auto generates routes from files under ./pages
@@ -14,31 +15,19 @@ import router from './router'
 //   }
 // })
 
-export function App() {
+export function App (props) {
+  console.log("app:", props)
   const routes = router.routes
   return (
     <>
       <nav>
         <ul>
-          {routes.map(({ label, path }, index) => {
-            if (!path) return null
-            return (
-              <li key={index}>
-                <Link to={path}>{label}</Link>
-              </li>
-            )
-          })}
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/blog">Blog</Link></li>
+          <li><Link to="/about">About</Link></li>
         </ul>
       </nav>
-      <Switch>
-        {routes.map(({ path, component: RouteComp }, index) => {
-          return (
-            <Route key={index} path={path} exact>
-              <RouteComp />
-            </Route>
-          )
-        })}
-      </Switch>
+      {renderRoutes(routes, { data: [1] })}
     </>
   )
 }

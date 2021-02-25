@@ -40,6 +40,10 @@ async function createServer(
     )
   }
 
+  app.use('/favicon.ico', (req, res) => {
+    res.end()
+  })
+  
   app.use('*', async (req, res) => {
     try {
       const url = req.originalUrl
@@ -56,7 +60,7 @@ async function createServer(
       }
 
       const context = {}
-      const appHtml = render(url, context)
+      const appHtml = await render(url, context)
 
       if (context.url) {
         // Somewhere a `<Redirect>` was rendered
