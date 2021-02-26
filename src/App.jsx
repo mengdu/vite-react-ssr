@@ -1,6 +1,7 @@
 import { Link, Route, Switch } from 'react-router-dom'
 import { renderRoutes } from 'react-router-config'
 import router from './router'
+import { SSRConsumer } from './context'
 
 // Auto generates routes from files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import
@@ -15,19 +16,28 @@ import router from './router'
 //   }
 // })
 
-export function App (props) {
-  console.log("app:", props)
-  const routes = router.routes
-  return (
-    <>
-      <nav>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/blog">Blog</Link></li>
-          <li><Link to="/about">About</Link></li>
-        </ul>
-      </nav>
-      {renderRoutes(routes, { data: [1] })}
-    </>
-  )
+export function App(props) {
+    const routes = router.routes
+    return (
+        <>
+            <SSRConsumer>
+                {(data) => {
+                    console.log(data)
+                    return (
+                        <>
+                            <nav>
+                                <ul>
+                                    <li><Link to="/">Home</Link></li>
+                                    <li><Link to="/blog">Blog</Link></li>
+                                    <li><Link to="/about">About</Link></li>
+                                </ul>
+                            </nav>
+                            <p>{JSON.stringify(data)}</p>
+                            {renderRoutes(routes, { data: data })}
+                        </>
+                    )
+                }}
+            </SSRConsumer>
+        </>
+    )
 }
