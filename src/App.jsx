@@ -21,8 +21,7 @@ export function App(props) {
     return (
         <>
             <SSRConsumer>
-                {(data) => {
-                    console.log(data)
+                {(props) => {
                     return (
                         <>
                             <nav>
@@ -32,8 +31,8 @@ export function App(props) {
                                     <li><Link to="/about">About</Link></li>
                                 </ul>
                             </nav>
-                            <p>{JSON.stringify(data)}</p>
-                            {renderRoutes(routes, { data: data })}
+                            <p>ssrData: {JSON.stringify(props)}</p>
+                            {renderRoutes(routes, { ...props })}
                         </>
                     )
                 }}
