@@ -36,8 +36,15 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
     }
 
     app.use('/favicon.ico', (req, res) => {
-        res.end()
+        res.end('ok')
     })
+
+    if (!isProd) {
+        app.use(function (req, res, next) {
+            console.log(req.method, req.url)
+            next()
+        })
+    }
 
     app.use('*', async (req, res) => {
         try {
@@ -54,13 +61,18 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
                 render = require('./dist/server/entry-server.js').render
             }
 
-            const context = { query: req.query, body: req.body, req }
+            const context = {
+                isSSR: true,
+                query: req.query,
+                url: req.originalUrl,
+                req
+            }
             const { appHtml, propsData } = await render(url, context)
 
-            if (context.url) {
-                // Somewhere a `<Redirect>` was rendered
-                return res.redirect(301, context.url)
-            }
+            // if (context.url) {
+            //     // Somewhere a `<Redirect>` was rendered
+            //     return res.redirect(301, context.url)
+            // }
 
             const html = template
                 .replace('<!--init-props-->', `<script id="ssr-props" type="text/json">${JSON.stringify(propsData)}</script>`)

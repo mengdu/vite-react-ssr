@@ -1,7 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { sleep } from '../utils'
+
+function Demo (props) {
+  return 'demo'
+}
 function Home (props) {
-  // console.log(props.arr)
   const [arr, setArr] = useState(props.arr || [])
 
   const onAdd = () => {
@@ -9,11 +12,16 @@ function Home (props) {
     setArr([...arr])
   }
 
+  useEffect(() => {
+    setArr(props.arr)
+  }, [props.arr])
+
   return (
     <>
       <h1>Home</h1>
       <button onClick={onAdd}>Add</button>
       <p>{JSON.stringify(arr)}</p>
+      <Demo></Demo>
     </>
   )
 }

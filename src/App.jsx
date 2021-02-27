@@ -17,26 +17,27 @@ import { SSRConsumer } from './context'
 // })
 
 export function App(props) {
-    const routes = router.routes
-    return (
-        <>
-            <SSRConsumer>
-                {(props) => {
-                    return (
-                        <>
-                            <nav>
-                                <ul>
-                                    <li><Link to="/">Home</Link></li>
-                                    <li><Link to="/blog">Blog</Link></li>
-                                    <li><Link to="/about">About</Link></li>
-                                </ul>
-                            </nav>
-                            <p>ssrData: {JSON.stringify(props)}</p>
-                            {renderRoutes(routes, { ...props })}
-                        </>
-                    )
-                }}
-            </SSRConsumer>
-        </>
-    )
+  const routes = router.routes
+  return (
+    <>
+      <SSRConsumer>
+        {(ctx) => {
+          return (
+            <>
+              <nav>
+                <ul>
+                  <li><Link to="/">Home</Link></li>
+                  <li><Link to="/user/1234?with=1">User</Link></li>
+                  <li><Link to="/blog">Blog</Link></li>
+                  <li><Link to="/about">About</Link></li>
+                </ul>
+              </nav>
+              <p>ssrData: {JSON.stringify(ctx)}</p>
+              {renderRoutes(routes, { ...ctx })}
+            </>
+          )
+        }}
+      </SSRConsumer>
+    </>
+  )
 }
