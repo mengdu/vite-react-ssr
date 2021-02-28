@@ -32,7 +32,6 @@ export function App(props) {
                   <li><Link to="/about">About</Link></li>
                 </ul>
               </nav>
-              <p>ssrData: {JSON.stringify(ctx)}</p>
               {renderRoutes(routes, { ...ctx })}
             </>
           )

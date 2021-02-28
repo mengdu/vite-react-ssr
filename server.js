@@ -67,15 +67,15 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
                 url: req.originalUrl,
                 req
             }
-            const { appHtml, propsData } = await render(url, context)
+            const { appHtml, propsData, redirect } = await render(url, context)
 
-            // if (context.url) {
-            //     // Somewhere a `<Redirect>` was rendered
-            //     return res.redirect(301, context.url)
-            // }
+            if (redirect) {
+                // Somewhere a `<Redirect>` was rendered
+                return res.redirect(302, redirect)
+            }
 
             const html = template
-                .replace('<!--init-props-->', `<script id="ssr-props" type="text/json">${JSON.stringify(propsData)}</script>`)
+                .replace('<!--init-props-->', `<script id="ssr-data" type="text/json">${JSON.stringify(propsData)}</script>`)
                 .replace(`<!--app-html-->`, appHtml)
 
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html)

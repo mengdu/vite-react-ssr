@@ -25,15 +25,19 @@ async function loadData (url, context) {
 }
 
 export async function render(url, context) {
-    const props = await loadData(url, context)
+    const data = await loadData(url, context)
+
+    if (data.props && data.props.redirect) {
+        return { redirect: data.props.redirect }
+    }
 
     const html = ReactDOMServer.renderToString(
-        <SSRProvider value={props}>
+        <SSRProvider value={data}>
             <StaticRouter location={url} context={context}>
                 <App></App>
             </StaticRouter>
         </SSRProvider>
     )
 
-    return { appHtml: html, propsData: props }
+    return { appHtml: html, propsData: data }
 }

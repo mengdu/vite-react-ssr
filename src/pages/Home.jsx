@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { sleep } from '../utils'
+import request from '../utils/request'
 
 function Demo (props) {
   return 'demo'
@@ -21,17 +22,21 @@ function Home (props) {
       <h1>Home</h1>
       <button onClick={onAdd}>Add</button>
       <p>{JSON.stringify(arr)}</p>
+      <p>{JSON.stringify(props.data)}</p>
       <Demo></Demo>
     </>
   )
 }
 
 Home.loadData = async function (ctx) {
-  // console.log(ctx)
   // await sleep(2000) // 延迟测试
-
+  const result = await request.get('https://cnodejs.org/api/v1/topics')
+  console.log(result.data)
   return {
-    arr: [1, 2, 3, 4]
+    // redirect: '/user/1234', // Switch to route
+    // redirect: 'https://other.com?w=123', // Redirect to site
+    data: result.data, // props.data
+    arr: [1, 2, 3, 4] // props.arr
   }
 }
 

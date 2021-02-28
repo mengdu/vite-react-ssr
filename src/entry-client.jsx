@@ -4,7 +4,7 @@ import { App } from './App'
 import { SSRProvider } from './context'
 
 // hydrate 初始化时需要与服务端 renderToString 渲染是需要的数据一致
-const text = document.getElementById('ssr-props').innerText
+const text = document.getElementById('ssr-data').innerText
 const props = JSON.parse(text)
 
 ReactDOM.hydrate(

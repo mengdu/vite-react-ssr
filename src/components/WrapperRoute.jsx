@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import router from '../router'
 import { queryStringToObject } from '../utils'
 
 export default function WrapperRoute (Component) {
@@ -14,6 +15,10 @@ export default function WrapperRoute (Component) {
         }
       }
     }
+
+    data.ssrLoaded = isCurrent || !!Component.loadData
+    data.loadDataed = isCurrent
+    data.hasLoadData = !!Component.loadData
     const [injectProps, setInjectProps] = useState(data)
 
     useEffect(() => {
@@ -25,12 +30,25 @@ export default function WrapperRoute (Component) {
           params: props.match.params,
           url: props.match.url + props.location.search
         }).then(result => {
-          setInjectProps({ ...injectProps, ...result })
+          if (result.redirect) {
+            if (/^http/.test(result.redirect)) {
+              location.href = result.redirect
+            } else {
+              props.history.push(result.redirect)
+            }
+          } else {
+            const newProps = { ...injectProps, ...result }
+            newProps.loadDataed = true
+            setInjectProps(newProps)
+          }
+        }).catch(err => {
+          newProps.loadDataed = true
+          const newProps = { ...injectProps, err }
+          setInjectProps(newProps)
         })
       }
     }, [])
 
-    // console.log(props.route.component.$raw === Component)
     return <Component {...injectProps} />
   }
 
