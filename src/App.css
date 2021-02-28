@@ -1,0 +1,22 @@
+body {
+  font-family: "helvetica neue", arial, sans-serif;
+  font-size: 14px;
+  color: #1f2025;
+  background-color: #fefefe;
+}
+
+#app {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.main-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.main-nav ul li {
+  display: inline-block;
+  padding: 0 10px;
+}

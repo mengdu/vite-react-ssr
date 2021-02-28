@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { renderRoutes } from 'react-router-config'
 import router from './router'
 import { SSRConsumer } from './context'
+import './App.css'
 
 // Auto generates routes from files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import
@@ -24,7 +25,8 @@ export function App(props) {
         {(ctx) => {
           return (
             <>
-              <nav>
+              <h1>React SSR Project base on Vite</h1>
+              <nav className="main-nav">
                 <ul>
                   <li><Link to="/">Home</Link></li>
                   <li><Link to="/user/1234?with=1">User</Link></li>

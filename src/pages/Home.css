@@ -1,0 +1,27 @@
+.topics-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.topic-item {
+  line-height: 25px;
+}
+
+.topic-item .avatar {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.topic-item .tag {
+  background-color: #fffcd7;
+  border: 1px solid #d5d458;
+  border-radius: 5px;
+  color: #555;
+  font-size: 8pt;
+  margin-left: 0.25em;
+  padding: 0px 0.4em 1px 0.4em;
+  text-decoration: none;
+}
