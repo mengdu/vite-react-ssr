@@ -1,4 +1,4 @@
-import { Link, Route, Switch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { renderRoutes } from 'react-router-config'
 import router from './router'
 import { SSRConsumer } from './context'
