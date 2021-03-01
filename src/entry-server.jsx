@@ -1,27 +1,27 @@
 import ReactDOMServer from 'react-dom/server'
-import { matchRoutes } from 'react-router-config'
 import { StaticRouter } from 'react-router-dom'
 import { App } from './App'
 import router from './router'
 import { SSRProvider } from './context'
 
 async function loadData (url, context) {
-    const routes = matchRoutes(router.routes, url.replace(/\?.*$/, ''))
-    const firstRoute = routes[0]
+    const routes = router.match(url.replace(/\?.*$/, ''))
+    const paths = []
+    const promises = routes.map(e => {
+        paths.push(e.route.path)
+        return e.route.component.loadData
+            ? e.route.component.loadData({ ...context, params: e.match.params })
+            : null
+    })
 
-    if (firstRoute && firstRoute.route.component.loadData) {
-        context.params = firstRoute.match.params
-        const result = await firstRoute.route.component.loadData(context, firstRoute.match)
-        return {
-            path: firstRoute.route.path,
-            props: result
-        }
+    const arr = await Promise.all(promises)
+    const dict = {}
+
+    for (const i in arr) {
+        dict[paths[i]] = arr[i]
     }
 
-    return {
-        path: firstRoute && firstRoute.route.path,
-        props: null
-    }
+    return dict
 }
 
 export async function render(url, context) {
