@@ -7,14 +7,15 @@ function ssrWrapper (Component) {
     const ref = useRef(false)
     const ssrData = props.ssr[props.match.path]
     const data = { ...props, ...ssrData }
+    const ssrCurrent = props.ssr.hasOwnProperty(props.match.path)
     data.hasLoadData = !!Component.loadData
-    data.ssrLoaded = data.hasLoadData && props.ssr.hasOwnProperty(props.match.path)
+    data.ssrLoaded = data.hasLoadData && ssrCurrent
     data.loadDataed = data.ssrLoaded
     const [injectProps, setInjectProps] = useState(data)
 
     useEffect(() => {
-      // 路由切换时当前组件已经在服务端调用loadData
-      if (!data.ssrLoaded && Component.loadData) {
+      // 首次未在服务器渲染或首次服务端渲染了此路由，前端切换了再切回来重新执行 loadData
+      if ((!data.ssrLoaded || (ssrData && ssrData.$$loaded)) && Component.loadData) {
         Promise.all([
           Component.loadData({
             isSSR: false,
@@ -45,6 +46,11 @@ function ssrWrapper (Component) {
 
       return () => {
         ref.current = true
+
+        if (ssrData) {
+          // 标记此路由已经加载过一次
+          ssrData.$$loaded = ssrCurrent
+        }
       }
     }, [])
 
