@@ -5,15 +5,28 @@ body {
   background-color: #fefefe;
 }
 
+a {
+  text-decoration: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
 #app {
   width: 800px;
   margin: 0 auto;
+}
+
+.main-nav {
+  margin-bottom: 50px;
 }
 
 .main-nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  font-weight: 600;
 }
 
 .main-nav ul li {

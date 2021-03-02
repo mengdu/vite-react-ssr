@@ -10,7 +10,7 @@ export function App(props) {
         {(ctx) => {
           return (
             <>
-              <h1>React SSR Project base on Vite</h1>
+              <h1 className="text-center">React SSR base on Vite</h1>
               <nav className="main-nav">
                 <ul>
                   <li><Link to="/">Home</Link></li>
