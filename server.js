@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
+const port = +process.env.PORT || 3000
 const resolve = (p) => path.resolve(__dirname, p)
 
 async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV === 'production') {
@@ -91,8 +92,8 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
 
 if (!isTest) {
     createServer().then(({ app }) =>
-        app.listen(3000, () => {
-            console.log('http://localhost:3000')
+        app.listen(port, () => {
+            console.log(`StartAt: http://localhost:${port}`)
         })
     )
 }
