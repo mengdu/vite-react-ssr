@@ -18,7 +18,10 @@ async function loadData (url, context) {
     const dict = {}
 
     for (const i in arr) {
-        dict[paths[i]] = arr[i]
+        dict[paths[i]] = {
+            url: url,
+            data: arr[i]
+        }
     }
 
     return dict
@@ -29,6 +32,12 @@ export async function render(url, context) {
 
     if (data.props && data.props.redirect) {
         return { redirect: data.props.redirect }
+    }
+
+    for (const i in data) {
+        if (data[i].data && data[i].data.redirect) {
+            return { redirect: data[i].data.redirect }
+        }
     }
 
     const html = ReactDOMServer.renderToString(

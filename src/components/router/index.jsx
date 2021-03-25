@@ -3,64 +3,73 @@ import { useState, useEffect, useRef } from 'react'
 import { queryStringToObject } from '../../utils'
 
 function ssrWrapper (Component) {
-  function RWrapper (props) {
-    const ref = useRef(false)
-    const ssrData = props.ssr[props.match.path]
-    const data = { ...props, ...ssrData }
-    const ssrCurrent = props.ssr.hasOwnProperty(props.match.path)
-    data.hasLoadData = !!Component.loadData
-    data.ssrLoaded = data.hasLoadData && ssrCurrent
-    data.loadDataed = data.ssrLoaded
-    const [injectProps, setInjectProps] = useState(data)
+  function SSRPage (props) {
+    const exit = useRef(false)
+    const ssr = props.ssr[props.match.path]
+    const ssrData = ssr ? ssr.data : null
+    const url = props.location.pathname + props.location.search
+    const data = {
+      ...ssrData,
+      ssrCurrent: props.ssr.hasOwnProperty(props.match.path) && ssr.url === url
+    }
+    data.loaded = data.ssrCurrent
+
+    const [injectData, setInjectData] = useState(data)
+
+    const frontendLoadData = () => {
+      Promise.all([
+        Component.loadData({
+          isSSR: false,
+          query: queryStringToObject(props.location.search),
+          params: props.match.params,
+          url: props.match.url + props.location.search
+        })
+      ]).then(([result]) => {
+        if (result.redirect) {
+          if (/^http/.test(result.redirect)) {
+            location.href = result.redirect
+          } else {
+            props.history.push(result.redirect)
+          }
+        } else {
+          const newData = { ...injectData, ...result }
+          newData.loaded = true
+
+          // 避免 unmounted 还设置
+          !exit.current && setInjectData(newData)
+        }
+      }).catch(err => {
+        const newData = { ...injectProps, err }
+        newData.loaded = true
+        !exit.current && setInjectData(newData)
+      })
+    }
 
     useEffect(() => {
-      // 首次未在服务器渲染或首次服务端渲染了此路由，前端切换了再切回来重新执行 loadData
-      if ((!data.ssrLoaded || (ssrData && ssrData.$$loaded)) && Component.loadData) {
-        Promise.all([
-          Component.loadData({
-            isSSR: false,
-            query: queryStringToObject(props.location.search),
-            params: props.match.params,
-            url: props.match.url + props.location.search
-          })
-        ]).then(([result]) => {
-          if (result.redirect) {
-            if (/^http/.test(result.redirect)) {
-              location.href = result.redirect
-            } else {
-              props.history.push(result.redirect)
-            }
-          } else {
-            const newProps = { ...injectProps, ...result }
-            newProps.loadDataed = true
-
-            // 避免 unmounted 还设置
-            !ref.current && setInjectProps(newProps)
-          }
-        }).catch(err => {
-          const newProps = { ...injectProps, err }
-          newProps.loadDataed = true
-          !ref.current && setInjectProps(newProps)
-        })
+      // 切换路由，如果服务端渲染的不是当前路由时渲染
+      if ((!data.ssrCurrent) && Component.loadData) {
+        frontendLoadData()
       }
 
       return () => {
-        ref.current = true
-
-        if (ssrData) {
-          // 标记此路由已经加载过一次
-          ssrData.$$loaded = ssrCurrent
-        }
+        exit.current = true
       }
     }, [])
 
-    return <Component {...injectProps} />
+    return <Component
+      match={props.match}
+      history={props.history}
+      location={props.location}
+      route={props.route}
+      view={props.view}
+      ssr={props.ssr}
+      {...injectData}/>
   }
 
-  RWrapper.loadData = Component.loadData
-  RWrapper.$raw = Component
+  SSRPage.loadData = Component.loadData
+  SSRPage.$raw = Component
 
-  return RWrapper
+  return SSRPage
 }
 
 export default class Router {
