@@ -1,6 +1,6 @@
 # Vite React SSR
 
-Server Side Rendering project template base on `Vite` + `React` + `SSR`.
+Server Side Rendering project template base on `Vite` + `React`.
 
 ## loadData
 
@@ -18,6 +18,7 @@ Demo.loadData = async (ctx) => {
   return {
     // redirect: '/user/1234', // Switch to route
     // redirect: 'https://other.com?w=123', // Redirect to site
+
     // props.list
     list: [],
     // props.count
@@ -43,25 +44,23 @@ export default Demo
 // src/router.jsx
 import Router from './components/router'
 import Home from './pages/Home'
-import Blog from './pages/Blog'
 import User from './pages/User'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
-import Demo from './pages/Demo'
-import Demo1 from './pages/Demo/Demo1'
-import Demo2 from './pages/Demo/Demo2'
+import Layout from './pages/Layout'
+import Page1 from './pages/Layout/Page-1'
+import Page2 from './pages/Layout/Page-2'
 
 export default new Router({
     routes: [
         { path: '/', component: Home },
         { path: '/user/:userId', component: User },
-        { path: '/blog', component: Blog },
         {
-            path: '/demo',
-            component: Demo,
+            path: '/layout',
+            component: Layout,
             routes: [
-                { path: '/demo/test', component: Demo1 },
-                { path: '/demo/test/123', component: Demo2 },
+                { path: '/layout/page-1', component: Page1 },
+                { path: '/layout/page-2', component: Page2 },
             ]
         },
         { path: '/about', component: About },

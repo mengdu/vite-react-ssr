@@ -14,9 +14,8 @@ export function App(props) {
               <nav className="main-nav">
                 <ul>
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/user/1234?with=1">User</Link></li>
-                  <li><Link to="/blog">Blog</Link></li>
-                  <li><Link to="/demo">Demo</Link></li>
+                  <li><Link to="/user/1234?with=1">Params</Link></li>
+                  <li><Link to="/layout">Layout</Link></li>
                   <li><Link to="/about">About</Link></li>
                 </ul>
               </nav>
