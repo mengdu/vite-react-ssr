@@ -78,12 +78,8 @@ async function handleRender (req, res, { template, dev, vite, dist }) {
             return
         }
 
-        const tags = {
-            '<': '&lt;',
-            '>': '&gt;'
-        }
         const ssrDataText = JSON.stringify(propsData)
-            .replace(/(<|>)/g, v => tags[v])
+            .replace(/\//g, '\\/')
 
         const html = template
             .replace('<!--init-props-->', `<script id="ssr-data" type="text/json">${ssrDataText}</script>`)
