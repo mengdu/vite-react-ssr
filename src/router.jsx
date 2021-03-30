@@ -1,6 +1,6 @@
 import Router from './components/router'
 import Home from './pages/Home'
-import User from './pages/User'
+import Params from './pages/Params'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
 import Layout from './pages/Layout'
@@ -10,7 +10,9 @@ import Page2 from './pages/Layout/Page-2'
 export default new Router({
     routes: [
         { path: '/', component: Home },
-        { path: '/user/:userId', component: User },
+        // Dynamic routing
+        { path: '/user/:userId', component: Params },
+        { path: '/docs/:docId/:postId?', component: Params },
         {
             path: '/layout',
             component: Layout,

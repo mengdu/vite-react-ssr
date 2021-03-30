@@ -16,7 +16,7 @@ export function App(props) {
           return (
             <>
               <h1 className="text-center">React SSR base on Vite</h1>
-              <nav className="main-nav">
+              <nav className="main-nav text-center">
                 <ul>
                   <li><Link to="/">Home</Link></li>
                   <li><Link to="/user/1234?with=1">Params</Link></li>
@@ -24,7 +24,9 @@ export function App(props) {
                   <li><Link to="/about">About</Link></li>
                 </ul>
               </nav>
-              {router.view({ ssr: ctx })}
+              <div className="text-center">
+                {router.view({ ssr: ctx })}
+              </div>
             </>
           )
         }}

@@ -7,7 +7,9 @@ function User (props) {
 
   return (
     <>
-      <h1>User</h1>
+      <h1>Dynamic routing</h1>
+      <a href="/docs/100/20?with=1">/docs/:docId/:postId</a><br />
+      <a href="/docs/200?with=1">/docs/:docId</a>
       <p>{JSON.stringify(props.data)}</p>
     </>
   )
