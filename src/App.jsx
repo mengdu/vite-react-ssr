@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import router from './router'
 import { SSRConsumer } from './context'
+import ErrorPage from './pages/Error'
 import './App.css'
 
 export function App(props) {
@@ -8,6 +9,10 @@ export function App(props) {
     <>
       <SSRConsumer>
         {(ctx) => {
+          if (ctx.$ssrErrorMsg) {
+            return <ErrorPage message={ctx.$ssrErrorMsg}/>
+          }
+
           return (
             <>
               <h1 className="text-center">React SSR base on Vite</h1>

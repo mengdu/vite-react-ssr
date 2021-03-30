@@ -88,11 +88,11 @@ async function handleRender (req, res, { template, dev, vite, dist }) {
         res.statusCode = 200
         res.setHeader('Content-Type', 'text/html; utf-8')
         res.end(html)
-    } catch (e) {
-        dev && vite.ssrFixStacktrace(e)
-        console.error(e.stack)
+    } catch (err) {
+        dev && vite.ssrFixStacktrace(err)
+        console.error(err)
         res.statusCode = 500
-        res.statusMessage = e.stack
+        res.end('Server Error')
     }
 }
 
