@@ -30,10 +30,6 @@ async function loadData (url, context) {
 export async function render(url, context) {
     const data = await loadData(url, context)
 
-    if (data.props && data.props.redirect) {
-        return { redirect: data.props.redirect }
-    }
-
     for (const i in data) {
         if (data[i].data && data[i].data.redirect) {
             return { redirect: data[i].data.redirect }
